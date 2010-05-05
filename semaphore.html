@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title>Semaphore Test</title>
-	<script src="jquery-1.4.1.js"></script>
+	<script src="jquery-1.4.2.min.js"></script>
 	<script src="semaphore.js"></script>
 	<link rel="stylesheet" href="semaphore.css">
 </head>
@@ -18,8 +18,8 @@
 <input id=pause type=button value="Pause" disabled>
 <input id=stop type=button value="Stop" disabled>
 
-<label>Letter Duration (sec): <input type=number name=lettertime value="2"></label>
-<label>Space Duration (sec): <input type=number name=spacetime value="0.5"></label>
+<label>Letter Duration (sec): <input type=number id=lettertime value="2"></label>
+<label>Space Duration (sec): <input type=number id=spacetime value="0.5"></label>
 
 <label><input id=back type=checkbox> Back View</label>
 
@@ -59,7 +59,10 @@
 <p>
 <input id=all type=button value="Check All">
 <input id=none type=button value="Uncheck All">
-</p>
+
+<p>
+<label>Mean number of letters between spaces: <input type=number id=muspace value=5></label>
+
 </fieldset>
 
 <fieldset>
@@ -67,6 +70,7 @@
 <input id=showmsg type=button value="Show">
 <input id=hidemsg type=button value="Hide">
 <input id=clearmsg type=button value="Clear">
+<label><input id=autohide type=checkbox> Auto-Hide</label>
 
 <p>
 <textarea id="message" rows=6 cols=50 readonly></textarea>
@@ -74,7 +78,8 @@
 
 <fieldset>
 <legend>Status</legend>
-<span id=status>Please wait...</span>
+<span id=status>Please wait... (If this message does not go away shortly, make
+sure you have scripting enabled.)</span>
 </fieldset>
 
 </form>

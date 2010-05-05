@@ -5,6 +5,16 @@ function uncheck_all() {
 	$("#letters input[type=checkbox]").each(function(){$(this).attr('checked', false)});
 }
 
+function validate_number() {
+	if(isNaN($(this).val())) {
+		$(this).addClass("invalid");
+	}
+	else {
+		$(this).removeClass("invalid");
+	}
+	$(this).data('numVal', Number($(this).val()));
+}
+
 function status(msg, cls, timer) {
 	var id = $("html").data("statustimeout");
 	if( id !== null ) {
@@ -37,6 +47,7 @@ function switchrandom() {
 		$("#message").val("");
 		$("#message").attr("readonly", false);
 	}
+	stop();
 }
 
 function switchfrontback() {
@@ -49,11 +60,28 @@ function switchfrontback() {
 }
 
 function play() {
+	var t;
+	$("html").data("state", "play");
 	$("#main :input").each(function(){$(this).attr('disabled', true)});
 	$("#stop, #pause").attr('disabled', false);
 	$("#message").attr('disabled', true);
-	$("html").data("lettertime", Number($("input[name=lettertime]").val()) * 1000);
-	$("html").data("spacetime", Number($("input[name=spacetime]").val()) * 1000);
+	t = $("#lettertime").data("numVal");
+	if(isNaN(t)) {
+		stop();
+		status("The letter duration is invalid.", "error", true);
+		return;
+	}
+	$("html").data("lettertime", t * 1000);
+	t = $("#spacetime").data("numVal");
+	if(isNaN(t)) {
+		stop();
+		status("The space duration is invalid.", "error", true);
+		return;
+	}
+	$("html").data("spacetime", t * 1000);
+	if($("#autohide").attr("checked")) {
+		$("#message").css("visibility", "hidden");
+	}
 	if($("#random").attr("checked")) {
 		start_random();
 	} else {
@@ -63,6 +91,7 @@ function play() {
 function pause() {
 	window.clearTimeout($('html').data("timeout"));
 	display_letter(' ');
+	$("html").data("state", "pause");
 	$("#letters :input").each(function(){$(this).attr('disabled', false)});
 	$("#main :input").each(function(){$(this).attr('disabled', false)});
 	$("#stop, #pause").attr('disabled', true);
@@ -70,14 +99,26 @@ function pause() {
 	status("Paused", "", false);
 }
 function stop() {
-	pause();
-	$("html").data("index", 0);
-	status("Stopped", "", true);
+	if( $("html").data("state") == "play" ) {
+		pause();
+	}
+	if( $("html").data("state") == "pause" ) {
+		$("html").data("index", 0);
+		if($("#autohide").attr("checked")) {
+			$("#message").css("visibility", "visible");
+		}
+		status("Stopped", "", true);
+	}
+	$("html").data("state", "stop");
 }
 
 function start_random() {
 	var included = new Array();
-	$("#message").val("");
+	var t;
+	if($("html").data("index") == 0) {
+		$("#message").val("");
+		$("html").data("space", 0);
+	}
 	$("#letters :input").each(function(){$(this).attr('disabled', true)});
 	$("#letters input:checked").each(function(){included.push($(this).val())});
 	if(included.length == 0) {
@@ -86,12 +127,32 @@ function start_random() {
 		return;
 	}
 	$("html").data("letters", included);
-	status("Sending random characters", "", false);
+	t = $("#muspace").data("numVal");
+	if(isNaN(t)) {
+		stop();
+		status("The number of letters between spaces is invalid.", "error", true);
+		return;
+	}
+	$("html").data("spacethresh", t / 2.0);
+	status("Sending random letters", "", false);
 	show_random_letter();
 }
 function show_random_letter() {
 	var included = $("html").data("letters");
 	var letter = included[Math.floor(Math.random() * included.length)];
+	var i = $("html").data("index");
+	if(i >= $("#message").attr('rows') * $("#message").attr('cols')) {
+		stop();
+		return;
+	}
+	$("html").data("index", i+1);
+	var space = $("html").data("space");
+	space += Math.random();
+	if( space >= $("html").data("spacethresh") ) {
+		letter = ' ';
+		space = 0;
+	}
+	$("html").data("space", space);
 	$("#message").val($("#message").val() + letter.toUpperCase());
 	display_letter(letter);
 	$("html").data("timeout", window.setTimeout(show_random_space, $("html").data("lettertime")));
@@ -104,6 +165,7 @@ function show_random_space() {
 function start_message() {
 	var msg = $("#message").val();
 	msg = msg.replace(/[^ a-z]/gi, "");
+	msg = msg.replace(/\s+/gi, " ");
 	$("html").data("msg", msg);
 	status("Sending message", "", false);
 	show_message_letter();
@@ -126,7 +188,7 @@ function show_message_space() {
 	$("html").data("timeout", window.setTimeout(show_message_letter, $("html").data("spacetime")));
 }
 
-$(function() {
+$(function(){
 	$("#all").click(check_all);
 	$("#none").click(uncheck_all);
 	$("#play").click(play);
@@ -136,9 +198,12 @@ $(function() {
 	$("#hidemsg").click(function(){$("#message").css('visibility','hidden')});
 	$("#clearmsg").click(function(){$("#message").val("")});
 	$("#random").click(switchrandom);
-	$("#message").change(function (){$("html").data("index", 0)});
+	$("#message").change(stop);
 	$("#back").click(switchfrontback);
+	$("input[type=number]").change(validate_number);
+	$("input[type=number]").change();
 	$("html").data("frontback", "front");
 	$("html").data("index", 0);
+	$("html").data("state", "stop");
 	normalstatus();
 });

@@ -1,4 +1,4 @@
-#main input[type="number"] {
+input[type="number"] {
 	width: 3em;
 }
 
@@ -17,4 +17,8 @@ label {
 
 .error {
 	color: red;
+}
+
+.invalid {
+	background-color: red;
 }
