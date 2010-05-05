@@ -104,9 +104,6 @@ function stop() {
 	}
 	if( $("html").data("state") == "pause" ) {
 		$("html").data("index", 0);
-		if($("#autohide").attr("checked")) {
-			$("#message").css("visibility", "visible");
-		}
 		status("Stopped", "", true);
 	}
 	$("html").data("state", "stop");
