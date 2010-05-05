@@ -1,8 +1,8 @@
 function check_all() {
-	$("#letters input[type=checkbox]").each(function(){$(this).attr('checked', true)});
+	$("#letters input[type=checkbox]").attr('checked', true);
 }
 function uncheck_all() {
-	$("#letters input[type=checkbox]").each(function(){$(this).attr('checked', false)});
+	$("#letters input[type=checkbox]").attr('checked', false);
 }
 
 function validate_number() {
@@ -87,7 +87,7 @@ function switchfrontback() {
 function play() {
 	var t;
 	$("html").data("state", "play");
-	$("#main :input").each(function(){$(this).attr('disabled', true)});
+	$("#main :input").attr('disabled', true);
 	$("#stop, #pause").attr('disabled', false);
 	$("#message").attr('disabled', true);
 	t = $("#lettertime").data("numVal");
@@ -117,8 +117,8 @@ function pause() {
 	window.clearTimeout($('html').data("timeout"));
 	display_letter(' ', null);
 	$("html").data("state", "pause");
-	$("#letters :input").each(function(){$(this).attr('disabled', false)});
-	$("#main :input").each(function(){$(this).attr('disabled', false)});
+	$("#letters :input").attr('disabled', false);
+	$("#main :input").attr('disabled', false);
 	$("#stop, #pause").attr('disabled', true);
 	$("#message").attr('disabled', false);
 	status("Paused", "", false);
@@ -141,7 +141,7 @@ function start_random() {
 		$("#message").val("");
 		$("html").data("space", 0);
 	}
-	$("#letters :input").each(function(){$(this).attr('disabled', true)});
+	$("#letters :input").attr('disabled', true);
 	$("#letters input:checked").each(function(){included.push($(this).val())});
 	if(included.length == 0) {
 		stop();
