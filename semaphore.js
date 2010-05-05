@@ -31,10 +31,35 @@ function normalstatus() {
 	$("#status").text("Ready").attr("class", "");
 }
 
-function display_letter(letter) {
+function continue_letter() {
+	var snd = $("#sender");
+	display_letter( snd.data('next'), snd.data("callback") );
+}
+function display_letter( letter, callback ) {
+	var snd = $("#sender");
+
 	var myLetter = letter.toLowerCase();
 	if( myLetter == " " ) { myLetter = "sp"; }
-	$("#sender").attr('src', $("html").data("frontback") + "/" + myLetter + ".png");
+
+	var prev = snd.data("letter");
+	if( myLetter != "sp" && myLetter == prev ) {
+		snd.data('next', myLetter);
+		snd.data('callback', callback);
+		send_letter('sp');
+		$("html").data("timeout", window.setTimeout(continue_letter, $("html").data("spacetime")));
+	}
+	else {
+		snd.data('next', '');
+		snd.data('callback', null);
+		send_letter(myLetter);
+		if( callback !== null ) {
+			$("html").data("timeout", window.setTimeout(callback, $("html").data("lettertime")));
+		}
+	}
+}
+
+function send_letter(letter) {
+	$("#sender").attr('src', $("html").data("frontback") + "/" + letter + ".png").data("letter", letter);
 }
 
 function switchrandom() {
@@ -56,7 +81,7 @@ function switchfrontback() {
 	} else {
 		$("html").data("frontback", "front");
 	}
-	display_letter(' ');
+	display_letter(' ', null);
 }
 
 function play() {
@@ -90,7 +115,7 @@ function play() {
 }
 function pause() {
 	window.clearTimeout($('html').data("timeout"));
-	display_letter(' ');
+	display_letter(' ', null);
 	$("html").data("state", "pause");
 	$("#letters :input").each(function(){$(this).attr('disabled', false)});
 	$("#main :input").each(function(){$(this).attr('disabled', false)});
@@ -151,12 +176,7 @@ function show_random_letter() {
 	}
 	$("html").data("space", space);
 	$("#message").val($("#message").val() + letter.toUpperCase());
-	display_letter(letter);
-	$("html").data("timeout", window.setTimeout(show_random_space, $("html").data("lettertime")));
-}
-function show_random_space() {
-	display_letter(' ');
-	$("html").data("timeout", window.setTimeout(show_random_letter, $("html").data("spacetime")));
+	display_letter(letter, show_random_letter);
 }
 
 function start_message() {
@@ -177,12 +197,7 @@ function show_message_letter() {
 	}
 	var letter = msg.charAt(i);
 	$("html").data("index", i+1);
-	display_letter(letter);
-	$("html").data("timeout", window.setTimeout(show_message_space, $("html").data("lettertime")));
-}
-function show_message_space() {
-	display_letter(' ');
-	$("html").data("timeout", window.setTimeout(show_message_letter, $("html").data("spacetime")));
+	display_letter(letter, show_message_letter);
 }
 
 $(function(){
