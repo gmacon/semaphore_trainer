@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Semaphore Test</title>
+	<script src="jquery-1.4.1.js"></script>
+	<script src="semaphore.js"></script>
+	<link rel="stylesheet" href="semaphore.css">
+</head>
+<body>
+
+<img id="sender" src="front/sp.png">
+
+<form>
+
+<fieldset id="main">
+<legend>Controls</legend>
+<input id=play type=button value="Play">
+<input id=pause type=button value="Pause" disabled>
+<input id=stop type=button value="Stop" disabled>
+
+<label>Letter Duration (sec): <input type=number name=lettertime value="2"></label>
+<label>Space Duration (sec): <input type=number name=spacetime value="0.5"></label>
+
+<label><input id=back type=checkbox> Back View</label>
+
+<label><input id=random type=checkbox checked> Send Random Letters</label>
+</fieldset>
+
+<fieldset id="letters">
+<legend>Random Letters</legend>
+
+<label><input type=checkbox value=a>A</label>
+<label><input type=checkbox value=b>B</label>
+<label><input type=checkbox value=c>C</label>
+<label><input type=checkbox value=d>D</label>
+<label><input type=checkbox value=e>E</label>
+<label><input type=checkbox value=f>F</label>
+<label><input type=checkbox value=g>G</label>
+<label><input type=checkbox value=h>H</label>
+<label><input type=checkbox value=i>I</label>
+<label><input type=checkbox value=j>J</label>
+<label><input type=checkbox value=k>K</label>
+<label><input type=checkbox value=l>L</label>
+<label><input type=checkbox value=m>M</label>
+<label><input type=checkbox value=n>N</label>
+<label><input type=checkbox value=o>O</label>
+<label><input type=checkbox value=p>P</label>
+<label><input type=checkbox value=q>Q</label>
+<label><input type=checkbox value=r>R</label>
+<label><input type=checkbox value=s>S</label>
+<label><input type=checkbox value=t>T</label>
+<label><input type=checkbox value=u>U</label>
+<label><input type=checkbox value=v>V</label>
+<label><input type=checkbox value=w>W</label>
+<label><input type=checkbox value=x>X</label>
+<label><input type=checkbox value=y>Y</label>
+<label><input type=checkbox value=z>Z</label>
+
+<p>
+<input id=all type=button value="Check All">
+<input id=none type=button value="Uncheck All">
+</p>
+</fieldset>
+
+<fieldset>
+<legend>Message</legend>
+<input id=showmsg type=button value="Show">
+<input id=hidemsg type=button value="Hide">
+<input id=clearmsg type=button value="Clear">
+
+<p>
+<textarea id="message" rows=6 cols=50 readonly></textarea>
+</fieldset>
+
+<fieldset>
+<legend>Status</legend>
+<span id=status>Please wait...</span>
+</fieldset>
+
+</form>
+
+</body>
