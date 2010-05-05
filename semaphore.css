@@ -22,3 +22,7 @@ label {
 .invalid {
 	background-color: red;
 }
+
+#message {
+	background-color: rgb(88%, 88%, 88%);
+}

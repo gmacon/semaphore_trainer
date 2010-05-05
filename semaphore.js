@@ -113,12 +113,10 @@ function send_letter(letter) {
 function switchrandom() {
 	if($("#random").attr("checked")) {
 		$("#letters").css("visibility", "visible");
-		$("#message").val("");
-		$("#message").attr("readonly", true);
+		$("#message").val("").attr("readonly", true).css("background-color", "rgb(88%, 88%, 88%)");
 	} else {
 		$("#letters").css("visibility", "hidden");
-		$("#message").val("");
-		$("#message").attr("readonly", false);
+		$("#message").val("").attr("readonly", false).css("background-color", "inherit");
 	}
 	stop();
 }
