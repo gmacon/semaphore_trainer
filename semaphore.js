@@ -41,25 +41,73 @@ function display_letter( letter, callback ) {
 	var myLetter = letter.toLowerCase();
 	if( myLetter == " " ) { myLetter = "sp"; }
 
+	if( myLetter.length == 1 ) {
+		// Normal Character (special characters are two or more letters)
+
+		// Numbers Shift
+		if( /\d/.test(myLetter) ) {
+			if( snd.data("shift") != "numbers" ) {
+				snd.data("next", myLetter);
+				snd.data("callback", callback);
+				send_letter("ns");
+				snd.data("shift", "numbers");
+				$("html").data("timeout", window.setTimeout(continue_letter, $("html").data("lettertime")));
+				return;
+			}
+		}
+
+		// Letters Shift
+		else {
+			if( snd.data("shift") != "letters" ) {
+				snd.data("next", myLetter);
+				snd.data("callback", callback);
+				send_letter("ls");
+				snd.data("shift", "letters");
+				$("html").data("timeout", window.setTimeout(continue_letter, $("html").data("lettertime")));
+				return;
+			}
+		}
+
+	} // End if normal character
+
+	// Repeated Letter Spacing
 	var prev = snd.data("letter");
 	if( myLetter != "sp" && myLetter == prev ) {
 		snd.data('next', myLetter);
 		snd.data('callback', callback);
 		send_letter('sp');
 		$("html").data("timeout", window.setTimeout(continue_letter, $("html").data("spacetime")));
+		return;
 	}
-	else {
-		snd.data('next', '');
-		snd.data('callback', null);
-		send_letter(myLetter);
-		if( callback !== null ) {
-			$("html").data("timeout", window.setTimeout(callback, $("html").data("lettertime")));
-		}
+
+	// Normal Send
+	snd.data('next', '');
+	snd.data('callback', null);
+	send_letter(myLetter);
+	if( callback !== null ) {
+		$("html").data("timeout", window.setTimeout(callback, $("html").data("lettertime")));
 	}
 }
 
 function send_letter(letter) {
-	$("#sender").attr('src', $("html").data("frontback") + "/" + letter + ".png").data("letter", letter);
+	var special = {
+		' ' : 'sp',
+		'0' : 'k',
+		'1' : 'a',
+		'2' : 'b',
+		'3' : 'c',
+		'4' : 'd',
+		'5' : 'e',
+		'6' : 'f',
+		'7' : 'g',
+		'8' : 'h',
+		'9' : 'i',
+		'ls' : 'j',
+	};
+	var toSend = special[letter];
+	if( toSend === undefined )
+		toSend = letter;
+	$("#sender").attr('src', $("html").data("frontback") + "/" + toSend + ".png").data("letter", letter);
 }
 
 function switchrandom() {
@@ -181,7 +229,7 @@ function show_random_letter() {
 
 function start_message() {
 	var msg = $("#message").val();
-	msg = msg.replace(/[^ a-z]/gi, "");
+	msg = msg.replace(/[^ a-z0-9]/gi, "");
 	msg = msg.replace(/\s+/gi, " ");
 	$("html").data("msg", msg);
 	status("Sending message", "", false);
@@ -217,5 +265,6 @@ $(function(){
 	$("html").data("frontback", "front");
 	$("html").data("index", 0);
 	$("html").data("state", "stop");
+	$("#sender").data("shift", "letters");
 	normalstatus();
 });
