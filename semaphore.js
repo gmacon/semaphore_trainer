@@ -102,7 +102,7 @@ function send_letter(letter) {
 		'7' : 'g',
 		'8' : 'h',
 		'9' : 'i',
-		'ls' : 'j',
+		'ls' : 'j'
 	};
 	var toSend = special[letter];
 	if( toSend === undefined )
@@ -258,8 +258,8 @@ $(function(){
 	$("#random").click(switchrandom);
 	$("#message").change(stop);
 	$("#back").click(switchfrontback);
-	$("input[type=number]").change(validate_number);
-	$("input[type=number]").change();
+	$("input.number").change(validate_number);
+	$("input.number").change();
 	$("html").data("frontback", "front");
 	$("html").data("index", 0);
 	$("html").data("state", "stop");
