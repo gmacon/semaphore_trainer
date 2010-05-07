@@ -2,7 +2,7 @@
 
 For the One-Hundreth anniversary of the Boy Scouts of America, four historic
 Merit Badges were reactivated. One of these is
-[Signaling][http://www.scouting.org/sitecore/content/Home/BoyScouts/AdvancementandAwards/MeritBadges/2010_mb_signaling.aspx].
+[Signaling](http://www.scouting.org/sitecore/content/Home/BoyScouts/AdvancementandAwards/MeritBadges/2010_mb_signaling.aspx).
 In order to help the members of my brother’s Boy Scout Troop, I wrote this
 application to assist in learning semaphore signals. It can also be used by a
 counselor as a prompter for proficiency tests.
